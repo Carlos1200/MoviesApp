@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   View,
@@ -10,8 +10,18 @@ import {Formik} from 'formik';
 import {Background, MyTextInput} from '../components';
 import {loginStyles} from '../theme/loginTheme';
 import {loginSchema} from '../schemas';
+import {LoginSchemas} from '../interfaces';
+import {AuthenticateUser} from '../services';
+import {useStore} from '../store';
 
 export const LoginScreen = () => {
+  const {authenticatedUser} = useStore();
+  const [error, setError] = useState<null | string>(null);
+
+  const initialValues: LoginSchemas = {
+    email: '',
+    password: '',
+  };
   return (
     <>
       <Background />
@@ -19,9 +29,18 @@ export const LoginScreen = () => {
         style={loginStyles.flex1}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <Formik
-          initialValues={{email: '', password: ''}}
+          initialValues={initialValues}
           onSubmit={values => {
-            console.log(values);
+            AuthenticateUser(values)
+              .then(({data}) => {
+                authenticatedUser(data.token);
+              })
+              .catch(() => {
+                setError('Invalid email or password');
+                setTimeout(() => {
+                  setError(null);
+                }, 1500);
+              });
           }}
           validationSchema={loginSchema}>
           {({handleSubmit}) => (
@@ -45,6 +64,7 @@ export const LoginScreen = () => {
                   onPress={handleSubmit}>
                   <Text style={loginStyles.buttonText}>Login</Text>
                 </TouchableOpacity>
+                {error && <Text style={loginStyles.error}>{error}</Text>}
               </View>
             </View>
           )}
