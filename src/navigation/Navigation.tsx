@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {HomeScreen, LoginScreen} from '../screens';
+// import {HomeScreen, LoginScreen} from '../screens';
 import {useStore} from '../store';
 import {Loading} from '../components';
+import {LoginScreen} from '../screens/LoginScreen';
+import {HomeScreen} from '../screens/HomeScreen';
 
 export type RootStackParams = {
   LoginScreen: undefined;
