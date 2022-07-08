@@ -52,3 +52,17 @@ export enum OriginalLanguage {
   Es = 'es',
   Ja = 'ja',
 }
+
+//Color interfaces
+
+export interface ImageColors {
+  primary: string;
+  secondary: string;
+}
+
+export interface ColorsStoreState {
+  colors: ImageColors;
+  prevColors: ImageColors;
+  setMainColors: (colors: ImageColors) => void;
+  setPrevMainColors: (colors: ImageColors) => void;
+}
