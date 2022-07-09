@@ -1,11 +1,9 @@
 import React from 'react';
-import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {Image, View, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Movie} from '../interfaces';
+import {Movie, ScreenNavigationProps} from '../interfaces';
 import {styles} from '../theme/moviePosterTheme';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParams} from '../navigation/Navigation';
 
 interface Props {
   movie: Movie;
@@ -13,11 +11,6 @@ interface Props {
   width?: number;
   information?: boolean;
 }
-
-type DetailScreenNavigationProps = CompositeNavigationProp<
-  StackNavigationProp<RootStackParams, 'DetailScreen'>,
-  StackNavigationProp<RootStackParams, 'HomeScreen'>
->;
 
 export const MoviePoster = ({
   movie,
@@ -29,7 +22,7 @@ export const MoviePoster = ({
 
   const uri = `https://image.tmdb.org/t/p/w500${poster_path}`;
 
-  const navigation = useNavigation<DetailScreenNavigationProps>();
+  const navigation = useNavigation<ScreenNavigationProps>();
   return (
     <TouchableOpacity
       style={{
@@ -63,7 +56,7 @@ export const MoviePoster = ({
               <Text style={styles.subTitle}>{movie.vote_average}</Text>
             </View>
           </View>
-          <Text style={[styles.detail, styles.textJustify]}>
+          <Text numberOfLines={4} style={[styles.detail, styles.textJustify]}>
             {movie.overview}
           </Text>
         </View>

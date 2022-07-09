@@ -24,12 +24,14 @@ export const useMovieDetails = (movieId: number) => {
   });
 
   const getMovieDetails = async () => {
-    const movieDetailPromise = await movieDB.get<MovieFull>(`/${movieId}`);
+    const movieDetailPromise = await movieDB.get<MovieFull>(
+      `/movie/${movieId}`,
+    );
     const castPromise = await movieDB.get<CreditsResponse>(
-      `/${movieId}/credits`,
+      `/movie/${movieId}/credits`,
     );
     const similarMoviesPromise = await movieDB.get<MovieDBMoviesResponse>(
-      `/${movieId}/similar`,
+      `/movie/${movieId}/similar`,
     );
     const [movieDetailsResp, castResp, similarMoviesResp] = await Promise.all([
       movieDetailPromise,

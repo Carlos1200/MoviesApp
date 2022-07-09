@@ -1,65 +1,79 @@
-import React from 'react';
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useState} from 'react';
+import {TextInput, StyleSheet, TouchableOpacity, Animated} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-const {width} = Dimensions.get('window');
-export const TopBar = () => {
+import {useAnimatedSearchStore} from '../store/animatedSearch';
+import {ScreenNavigationProps} from '../interfaces';
+
+interface Props {
+  inputRef: React.RefObject<TextInput>;
+}
+
+export const TopBar = ({inputRef}: Props) => {
+  const {animation, isOpen, openAnimation, closeAnimation} =
+    useAnimatedSearchStore();
+  const [query, setQuery] = useState('');
+  const navigation = useNavigation<ScreenNavigationProps>();
+
+  const onSearch = () => {
+    if (!isOpen) {
+      openAnimation(animation, () => {
+        inputRef.current?.focus();
+      });
+    } else {
+      closeAnimation(animation);
+      if (query.length > 0) {
+        navigation.push('SearchScreen', {search: query});
+      }
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, {width: animation}]}>
       <TextInput
-        style={[styles.input, {width: width * 0.7}]}
+        ref={inputRef}
+        style={styles.input}
         placeholder="Search"
         placeholderTextColor={'#000'}
         autoCapitalize="none"
+        onSubmitEditing={onSearch}
+        onChangeText={text => setQuery(text)}
+        value={query}
       />
-      <TouchableOpacity style={styles.icon} activeOpacity={0.8}>
-        <Icon name="search" size={30} color="#000" />
+      <TouchableOpacity style={styles.searchContainer} onPress={onSearch}>
+        <Icon name="search" style={styles.icon} />
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    width: 60,
+    height: 60,
+    backgroundColor: '#fff',
+    borderRadius: 30,
+    alignSelf: 'center',
+  },
+  searchContainer: {
+    width: 60,
+    height: 60,
+    backgroundColor: '#5856D6',
+    position: 'absolute',
+    right: 0,
+    borderRadius: 30,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   input: {
-    paddingHorizontal: 20,
-    borderRadius: 25,
-    backgroundColor: '#fff',
+    flex: 1,
+    marginRight: 60,
+    marginLeft: 20,
     color: '#000',
-    fontSize: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-
-    elevation: 10,
+    fontSize: 16,
   },
   icon: {
-    marginLeft: 10,
-    backgroundColor: '#fff',
-    borderRadius: 25,
-    padding: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-
-    elevation: 10,
+    color: '#fff',
+    fontSize: 25,
   },
 });

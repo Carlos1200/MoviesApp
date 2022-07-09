@@ -1,46 +1,30 @@
-import React, {useEffect} from 'react';
-import {Dimensions, ScrollView, View} from 'react-native';
+import React, {useRef} from 'react';
+import {TextInput, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Carousel from 'react-native-reanimated-carousel';
+import OutsideView from 'react-native-detect-press-outside';
 import {
   GradientBackground,
   LoadingFetching,
-  MoviePoster,
+  MyCarousel,
   TopBar,
 } from '../components';
-import {useMovies} from '../hooks/useMovies';
-import {useColorsStore} from '../store/colors';
-import {getImageColors} from '../helpers/getImageColors';
-
-const {width: windowWidth, height: windowHeight} = Dimensions.get('window');
+import {useMovies} from '../hooks';
+import {useAnimatedSearchStore} from '../store/animatedSearch';
 
 export const HomeScreen = () => {
   const {loading, popular} = useMovies();
   const {top} = useSafeAreaInsets();
+  const {closeAnimation, animation} = useAnimatedSearchStore();
 
-  const {setMainColors} = useColorsStore();
-
-  const getPosterColors = async (index: number) => {
-    const movie = popular[index];
-    const uri = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-
-    const [primary = 'green', secondary = 'orange'] = await getImageColors(uri);
-
-    setMainColors({primary, secondary});
-  };
-
-  useEffect(() => {
-    if (popular.length > 0) {
-      getPosterColors(0);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [popular]);
+  const inputRef = useRef<TextInput>(null);
 
   return (
     <GradientBackground>
-      <ScrollView>
+      <OutsideView
+        childRef={inputRef}
+        onPressOutside={() => closeAnimation(animation)}>
         <View style={{marginTop: top + 20}}>
-          <TopBar />
+          <TopBar inputRef={inputRef} />
           {loading ? (
             <View
               style={{
@@ -49,28 +33,10 @@ export const HomeScreen = () => {
               <LoadingFetching />
             </View>
           ) : (
-            <Carousel
-              style={{
-                marginTop: -25,
-              }}
-              loop={true}
-              data={popular}
-              renderItem={({item}) => (
-                <MoviePoster
-                  key={item.id}
-                  movie={item}
-                  width={windowWidth}
-                  height={windowHeight}
-                />
-              )}
-              width={windowWidth}
-              height={windowHeight}
-              mode="parallax"
-              onSnapToItem={getPosterColors}
-            />
+            <MyCarousel movies={popular} />
           )}
         </View>
-      </ScrollView>
+      </OutsideView>
     </GradientBackground>
   );
 };

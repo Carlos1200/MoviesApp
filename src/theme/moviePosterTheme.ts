@@ -67,6 +67,7 @@ export const styles = StyleSheet.create({
   textJustify: {
     textAlign: 'justify',
     fontWeight: 'normal',
+    padding: 10,
   },
   justifyContent: {
     flexDirection: 'row',

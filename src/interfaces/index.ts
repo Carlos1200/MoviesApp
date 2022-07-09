@@ -1,3 +1,8 @@
+import {CompositeNavigationProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {Animated} from 'react-native';
+import {RootStackParams} from '../navigation/Navigation';
+
 //Auth interfaces
 export interface StoreState {
   loading: boolean;
@@ -141,3 +146,17 @@ export interface ColorsStoreState {
   setMainColors: (colors: ImageColors) => void;
   setPrevMainColors: (colors: ImageColors) => void;
 }
+
+//AnimatedSearch interfaces
+export interface AnimatedSearchStoreState {
+  animation: Animated.Value;
+  isOpen: boolean;
+  closeAnimation: (animation: Animated.Value) => void;
+  openAnimation: (animation: Animated.Value, callBack: () => void) => void;
+}
+
+//Navigation types
+export type ScreenNavigationProps = CompositeNavigationProp<
+  StackNavigationProp<RootStackParams, 'DetailScreen'>,
+  StackNavigationProp<RootStackParams, 'HomeScreen'>
+>;

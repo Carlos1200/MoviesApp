@@ -6211,6 +6211,11 @@ react-native-codegen@^0.69.1:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-detect-press-outside@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-detect-press-outside/-/react-native-detect-press-outside-1.0.4.tgz#9a5e2fca38c4b56398e237a8dc170d81fca8753f"
+  integrity sha512-XiUD6Ls5kf+bOXNSyrPK1gx4cnUEMt1hvWWFuXZeCT9McoY2Vh1sXShotKwetp6jSi0l+SzeNm3hA1izhm8Riw==
+
 react-native-gesture-handler@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.5.0.tgz#61385583570ed0a45a9ed142425e35f8fe8274fb"

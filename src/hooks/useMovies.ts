@@ -13,7 +13,9 @@ export const useMovies = () => {
   });
 
   const getMovies = async () => {
-    const popularPromise = await movieDB.get<MovieDBMoviesResponse>('/popular');
+    const popularPromise = await movieDB.get<MovieDBMoviesResponse>(
+      '/movie/popular',
+    );
 
     const response = await Promise.all([popularPromise]);
 
