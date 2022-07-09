@@ -25,6 +25,10 @@ export const styles = StyleSheet.create({
 
     elevation: 10,
   },
+  imageBorder: {
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
   infoContainer: {
     backgroundColor: '#fff',
     borderBottomLeftRadius: 20,
@@ -41,14 +45,21 @@ export const styles = StyleSheet.create({
     elevation: 10,
   },
   title: {
-    fontSize: 20,
+    fontSize: 27,
     fontWeight: 'bold',
     marginTop: 10,
     color: '#000',
     textAlign: 'center',
   },
+  subTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
+    textAlign: 'center',
+    marginLeft: 10,
+  },
   detail: {
-    fontSize: 15,
+    fontSize: 18,
     color: '#000',
     textAlign: 'center',
     fontWeight: '700',
@@ -59,11 +70,13 @@ export const styles = StyleSheet.create({
   },
   justifyContent: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
     alignContent: 'center',
     marginVertical: 5,
   },
-  icon: {
-    textAlign: 'center',
+  contentCenter: {
+    justifyContent: 'center',
+  },
+  contentEvenly: {
+    justifyContent: 'space-evenly',
   },
 });

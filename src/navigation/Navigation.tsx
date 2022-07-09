@@ -1,14 +1,14 @@
 import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-// import {HomeScreen, LoginScreen} from '../screens';
+import {DetailScreen, HomeScreen, LoginScreen} from '../screens';
 import {useStore} from '../store';
 import {Loading} from '../components';
-import {LoginScreen} from '../screens/LoginScreen';
-import {HomeScreen} from '../screens/HomeScreen';
+import {Movie} from '../interfaces';
 
 export type RootStackParams = {
   LoginScreen: undefined;
   HomeScreen: undefined;
+  DetailScreen: Movie;
 };
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -32,7 +32,10 @@ export const Navigation = () => {
       {status === 'unauthenticated' ? (
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
       ) : (
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <>
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="DetailScreen" component={DetailScreen} />
+        </>
       )}
     </Stack.Navigator>
   );

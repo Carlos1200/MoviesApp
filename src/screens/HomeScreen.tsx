@@ -2,7 +2,12 @@ import React, {useEffect} from 'react';
 import {Dimensions, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Carousel from 'react-native-reanimated-carousel';
-import {GradientBackground, Loading, MoviePoster} from '../components';
+import {
+  GradientBackground,
+  LoadingFetching,
+  MoviePoster,
+  TopBar,
+} from '../components';
 import {useMovies} from '../hooks/useMovies';
 import {useColorsStore} from '../store/colors';
 import {getImageColors} from '../helpers/getImageColors';
@@ -31,29 +36,39 @@ export const HomeScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [popular]);
 
-  if (loading) {
-    return <Loading />;
-  }
   return (
     <GradientBackground>
       <ScrollView>
         <View style={{marginTop: top + 20}}>
-          <Carousel
-            loop={true}
-            data={popular}
-            renderItem={({item}) => (
-              <MoviePoster
-                key={item.id}
-                movie={item}
-                width={windowWidth}
-                height={windowHeight}
-              />
-            )}
-            width={windowWidth}
-            height={windowHeight}
-            mode="parallax"
-            onSnapToItem={getPosterColors}
-          />
+          <TopBar />
+          {loading ? (
+            <View
+              style={{
+                marginVertical: '25%',
+              }}>
+              <LoadingFetching />
+            </View>
+          ) : (
+            <Carousel
+              style={{
+                marginTop: -25,
+              }}
+              loop={true}
+              data={popular}
+              renderItem={({item}) => (
+                <MoviePoster
+                  key={item.id}
+                  movie={item}
+                  width={windowWidth}
+                  height={windowHeight}
+                />
+              )}
+              width={windowWidth}
+              height={windowHeight}
+              mode="parallax"
+              onSnapToItem={getPosterColors}
+            />
+          )}
         </View>
       </ScrollView>
     </GradientBackground>
