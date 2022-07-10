@@ -11,13 +11,3 @@ Only work on android environment
   npm install # or yarn
   npx react-native run-android
 ```
-    
-## Demo
-
-|                          Example One                          |
-| :-----------------------------------------------------------: | 
-| ![](https://i.imgur.com/npo7jhi.gif) 
-
-|                          Example Two                          |
-| :-----------------------------------------------------------: | 
-| ![](https://i.imgur.com/GECTqV1.gif) 
