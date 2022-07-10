@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {RootStackParams} from '../navigation/Navigation';
 import {detailStyles} from '../theme/detailTheme';
 import {useMovieDetails} from '../hooks/useMovieDetails';
-import {LoadingFetching, MovieDetails} from '../components';
+import {Error, LoadingFetching, MovieDetails} from '../components';
 
 interface Props extends StackScreenProps<RootStackParams, 'DetailScreen'> {}
 
@@ -14,7 +14,9 @@ export const DetailScreen = ({route, navigation}: Props) => {
 
   const uri = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
 
-  const {isLoading, cast, similarMovies, movieFull} = useMovieDetails(movie.id);
+  const {isLoading, cast, similarMovies, movieFull, error} = useMovieDetails(
+    movie.id,
+  );
 
   return (
     <ScrollView style={detailStyles.container}>
@@ -38,7 +40,9 @@ export const DetailScreen = ({route, navigation}: Props) => {
             <Text style={detailStyles.subTitle}>{movie.vote_average}</Text>
           </View>
         </View>
-        {isLoading ? (
+        {error.status && !movieFull ? (
+          <Error message={error.message} />
+        ) : isLoading ? (
           <View style={detailStyles.loadingContainer}>
             <LoadingFetching />
           </View>

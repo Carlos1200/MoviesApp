@@ -3,6 +3,7 @@ import {TextInput, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import OutsideView from 'react-native-detect-press-outside';
 import {
+  Error,
   GradientBackground,
   LoadingFetching,
   MyCarousel,
@@ -12,7 +13,7 @@ import {useMovies} from '../hooks';
 import {useAnimatedSearchStore} from '../store/animatedSearch';
 
 export const HomeScreen = () => {
-  const {loading, popular} = useMovies();
+  const {loading, popular, error} = useMovies();
   const {top} = useSafeAreaInsets();
   const {closeAnimation, animation} = useAnimatedSearchStore();
 
@@ -24,8 +25,10 @@ export const HomeScreen = () => {
         childRef={inputRef}
         onPressOutside={() => closeAnimation(animation)}>
         <View style={{marginTop: top + 20}}>
-          <TopBar inputRef={inputRef} />
-          {loading ? (
+          {!error.status && <TopBar inputRef={inputRef} />}
+          {error.status ? (
+            <Error message={error.message} />
+          ) : loading ? (
             <View
               style={{
                 marginVertical: '25%',

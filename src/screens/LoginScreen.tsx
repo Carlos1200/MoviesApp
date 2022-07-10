@@ -12,10 +12,10 @@ import {loginStyles} from '../theme/loginTheme';
 import {loginSchema} from '../schemas';
 import {LoginSchemas} from '../interfaces';
 import {AuthenticateUser} from '../services';
-import {useStore} from '../store';
+import {useAuthStore} from '../store';
 
 export const LoginScreen = () => {
-  const {authenticatedUser} = useStore();
+  const {authenticatedUser} = useAuthStore();
   const [error, setError] = useState<null | string>(null);
 
   const initialValues: LoginSchemas = {

@@ -1,5 +1,6 @@
 export * from './Background';
 export * from './CastItem';
+export * from './Error';
 export * from './GradientBackground';
 export * from './Loading';
 export * from './LoadingFetching';

@@ -4,19 +4,26 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParams} from '../navigation/Navigation';
 import {useMoviesSearch} from '../hooks/useMoviesSearch';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {GradientBackground, LoadingFetching, MyCarousel} from '../components';
+import {
+  Error,
+  GradientBackground,
+  LoadingFetching,
+  MyCarousel,
+} from '../components';
 
 interface Props extends StackScreenProps<RootStackParams, 'SearchScreen'> {}
 
 export const SearchScreen = ({route}: Props) => {
   const {search} = route.params;
-  const {loading, movies} = useMoviesSearch({search});
+  const {loading, movies, error} = useMoviesSearch({search});
   const {top} = useSafeAreaInsets();
   return (
     <GradientBackground>
       <View style={{marginTop: top + 20}}>
         <Text style={styles.title}>Searching for: {search}</Text>
-        {loading ? (
+        {error.status ? (
+          <Error message={error.message} />
+        ) : loading ? (
           <View
             style={{
               marginVertical: '25%',

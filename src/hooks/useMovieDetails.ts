@@ -1,3 +1,4 @@
+import {useNetInfo} from '@react-native-community/netinfo';
 import {useEffect, useState} from 'react';
 import movieDB from '../api';
 import {
@@ -22,29 +23,43 @@ export const useMovieDetails = (movieId: number) => {
     cast: [],
     similarMovies: [],
   });
+  const {isConnected} = useNetInfo();
+  const [error, setError] = useState({
+    message: '',
+    status: false,
+  });
 
   const getMovieDetails = async () => {
-    const movieDetailPromise = await movieDB.get<MovieFull>(
-      `/movie/${movieId}`,
-    );
-    const castPromise = await movieDB.get<CreditsResponse>(
-      `/movie/${movieId}/credits`,
-    );
-    const similarMoviesPromise = await movieDB.get<MovieDBMoviesResponse>(
-      `/movie/${movieId}/similar`,
-    );
-    const [movieDetailsResp, castResp, similarMoviesResp] = await Promise.all([
-      movieDetailPromise,
-      castPromise,
-      similarMoviesPromise,
-    ]);
+    try {
+      const movieDetailPromise = await movieDB.get<MovieFull>(
+        `/movie/${movieId}`,
+      );
+      const castPromise = await movieDB.get<CreditsResponse>(
+        `/movie/${movieId}/credits`,
+      );
+      const similarMoviesPromise = await movieDB.get<MovieDBMoviesResponse>(
+        `/movie/${movieId}/similar`,
+      );
+      const [movieDetailsResp, castResp, similarMoviesResp] = await Promise.all(
+        [movieDetailPromise, castPromise, similarMoviesPromise],
+      );
 
-    setstate({
-      isLoading: false,
-      movieFull: movieDetailsResp.data,
-      cast: castResp.data.cast,
-      similarMovies: similarMoviesResp.data.results,
-    });
+      setstate({
+        isLoading: false,
+        movieFull: movieDetailsResp.data,
+        cast: castResp.data.cast,
+        similarMovies: similarMoviesResp.data.results,
+      });
+    } catch (e) {
+      setError({
+        message: 'Something went wrong',
+        status: true,
+      });
+      setstate(prevState => ({
+        ...prevState,
+        isLoading: false,
+      }));
+    }
   };
   useEffect(() => {
     getMovieDetails();
@@ -52,7 +67,22 @@ export const useMovieDetails = (movieId: number) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movieId]);
 
+  useEffect(() => {
+    if (!isConnected) {
+      setError({
+        message: 'No internet connection',
+        status: true,
+      });
+    } else {
+      setError({
+        message: '',
+        status: false,
+      });
+    }
+  }, [isConnected]);
+
   return {
     ...state,
+    error,
   };
 };

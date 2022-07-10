@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {DetailScreen, HomeScreen, LoginScreen, SearchScreen} from '../screens';
-import {useStore} from '../store';
+import {useAuthStore} from '../store';
 import {Loading} from '../components';
 import {Movie} from '../interfaces';
 
@@ -15,7 +15,7 @@ export type RootStackParams = {
 const Stack = createStackNavigator<RootStackParams>();
 
 export const Navigation = () => {
-  const {loading, status, getAuthenticatedUser} = useStore();
+  const {loading, status, getAuthenticatedUser} = useAuthStore();
 
   useEffect(() => {
     getAuthenticatedUser();
